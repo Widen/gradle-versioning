@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group 'widen'
+version '0.1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven {
+        credentials {
+            username System.env.JFROG_USER ?: USER
+            password System.env.JFROG_PASS ?: PASSWORD
+        }
+        url 'https://widen.jfrog.io/widen/repo/'
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username System.env.JFROG_USER ?: USER
+                password System.env.JFROG_PASS ?: PASSWORD
+            }
+
+            url 'https://widen.jfrog.io/widen/libs-releases-local'
+        }
+    }
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'commons-io:commons-io:2.6'
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier 'sources'
+}
