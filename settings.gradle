@@ -1,1 +1,14 @@
+pluginManagement {
+    repositories {
+        maven {
+            credentials {
+                username System.env.JFROG_USER ?: USER
+                password System.env.JFROG_PASS ?: PASSWORD
+            }
+            url 'https://widen.jfrog.io/widen/repo/'
+        }
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'gradle-versioning'

@@ -1,10 +1,10 @@
 plugins {
-    id 'java'
+    id 'java-gradle-plugin'
     id 'maven-publish'
+    id 'com.widen.versioning' version '0.1.0'
 }
 
 group 'widen'
-version '0.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -33,11 +33,14 @@ publishing {
 }
 
 dependencies {
-    compile gradleApi()
     compile 'commons-io:commons-io:2.6'
 }
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier 'sources'
+gradlePlugin {
+    plugins {
+        versioning {
+            id = "com.widen.versioning"
+            implementationClass = "com.widen.versioning.VersioningPlugin"
+        }
+    }
 }
