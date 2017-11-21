@@ -1,0 +1,19 @@
+language: groovy
+jdk:
+- oraclejdk8
+before_script:
+- export TZ=America/Chicago
+- git config --global user.email "widendev@widen.com"
+- git config --global user.name "Widen Bot"
+script:
+- "true"
+after_success:
+- if test $TRAVIS_PULL_REQUEST = false; then
+    ./gradlew publish
+  fi
+before_cache:
+  - rm -f "$HOME/.gradle/caches/modules-2/modules-2.lock"
+cache:
+  directories:
+    - "$HOME/.gradle/caches/"
+    - "$HOME/.gradle/wrapper/"
