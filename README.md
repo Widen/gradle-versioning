@@ -3,7 +3,12 @@ A Gradle plugin for applying project version from Git tags.
 
 [![Build Status](https://travis-ci.com/Widen/gradle-versioning.svg?token=UKs7oqY6xCy4WamxJFLH&branch=master)](https://travis-ci.com/Widen/gradle-versioning)
 
-This plugin moves your project version out of the `build.gradle` file, and instead uses Git tags as the canonical source of truth for version numbers.
+## Overview
+This plugin moves your project version out of the `build.gradle` file, and instead uses Git tags as the canonical source of truth for version numbers. This makes it easier to maintain nice version numbers and eliminate "Bump version" commits.
+
+Version numbers that are generated are based off of the output of running `git describe --tags` in your repository with a few minor changes. Generally the version number syntax follows the below scheme:
+
+> (last tagged version) `+` (commits since last tag) `-` (current commit hash) (`-dirty` if dirty)
 
 ## Usage
 Add the private repository to the list of plugin repositories in `settings.gradle`:
@@ -32,6 +37,23 @@ plugins {
 ```
 
 Once the plugin is applied, your project will now infer the current project version automatically based on the most recent release in your Git repository. Be sure to remove any `version '<version>'` lines in your `build.gradle`, or the version number will get overwritten.
+
+### Configuration
+The default settings should be good enough for most projects, but there are a couple of settings you can set to change how versions are generated if you need them. For example, if your Git tags are prefixed with a `v`, you can have versions generated only from such tags and then have the prefix removed using the `tagPrefix` setting:
+
+```groovy
+versioning {
+    tagPrefix = 'v'
+}
+```
+
+Below are all the available settings and what they do.
+
+| Name        | Default value | Description |
+| ----------- | ------------- | ----------- |
+| tagPrefix   | `null`        | A prefix that tags must start with in order to be considered a version tag. The prefix is removed from the final version string. |
+| excludeTags | `null`        | A regular expression for tags that should be ignored. |
+| dirtyMark   | `true`        | Whether a `-dirty` suffix should be added to the version string if the Git working directory is dirty. |
 
 ### Automatic publishing
 If you are using Travis, the following configuration works quite nicely:
