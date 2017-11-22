@@ -1,4 +1,5 @@
 plugins {
+    id 'groovy'
     id 'java-gradle-plugin'
     id 'maven-publish'
     id 'com.widen.versioning' version '0.1.0'
@@ -34,13 +35,16 @@ publishing {
 
 dependencies {
     compile 'commons-io:commons-io:2.6'
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.12'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
 gradlePlugin {
     plugins {
         versioning {
-            id = "com.widen.versioning"
-            implementationClass = "com.widen.versioning.VersioningPlugin"
+            id = 'com.widen.versioning'
+            implementationClass = 'com.widen.versioning.VersioningPlugin'
         }
     }
 }

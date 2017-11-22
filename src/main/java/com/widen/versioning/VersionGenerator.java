@@ -22,6 +22,9 @@ public class VersionGenerator {
     }
 
     public static String generateFromString(String describe) {
+        if (describe == null) {
+            return "";
+        }
         return describe.replaceFirst("-", "+");
     }
 }
