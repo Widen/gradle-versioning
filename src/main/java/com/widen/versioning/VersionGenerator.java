@@ -46,7 +46,7 @@ public class VersionGenerator {
             return null;
         }
 
-        String version = describe.replaceFirst("-", "+");
+        String version = describe.replaceFirst("-(\\d+-g.)", "+$1");
 
         if (settings.tagPrefix != null && version.startsWith(settings.tagPrefix)) {
             version = version.substring(settings.tagPrefix.length());
