@@ -11,6 +11,7 @@ public class VersionGenerator {
         args.add("git");
         args.add("describe");
         args.add("--tags");
+        args.add("--abbrev=7");
 
         if (settings.tagPrefix != null) {
             args.add("--match");
