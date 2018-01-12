@@ -49,11 +49,12 @@ versioning {
 
 Below are all the available settings and what they do.
 
-| Name        | Default value | Description |
-| ----------- | ------------- | ----------- |
-| tagPrefix   | `null`        | A prefix that tags must start with in order to be considered a version tag. The prefix is removed from the final version string. |
-| excludeTags | `null`        | A regular expression for tags that should be ignored. |
-| dirtyMark   | `true`        | Whether a `-dirty` suffix should be added to the version string if the Git working directory is dirty. |
+| Name           | Default value | Description |
+| -------------- | ------------- | ----------- |
+| initialVersion | `"0.0.0"`     | An initial version number to use if no tags are available. Can also be overridden by setting `version` manually. |
+| tagPrefix      | `null`        | A prefix that tags must start with in order to be considered a version tag. The prefix is removed from the final version string. |
+| excludeTags    | `null`        | A regular expression for tags that should be ignored. |
+| dirtyMark      | `true`        | Whether a `-dirty` suffix should be added to the version string if the Git working directory is dirty. |
 
 ### Automatic publishing
 If you are using Travis, the following configuration works quite nicely:

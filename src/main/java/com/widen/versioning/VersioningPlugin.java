@@ -21,6 +21,9 @@ public class VersioningPlugin implements Plugin<Project> {
             if (version != null) {
                 p.setVersion(version);
             }
+            else if ("unspecified".equals(p.getVersion())) {
+                p.setVersion(settings.initialVersion);
+            }
         });
     }
 }
