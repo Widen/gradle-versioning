@@ -2,11 +2,31 @@ package com.widen.versioning;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class VersionGenerator {
-    public static String generateFromGit(Settings settings) {
+    public static String generateFromGit(Settings settings, File projectDir) {
+        String describe = gitDescribe(settings, projectDir);
+        return generateFromString(describe, settings);
+    }
+
+    public static String generateFromString(String describe, Settings settings) {
+        if (describe == null) {
+            return null;
+        }
+
+        String version = describe.trim().replaceFirst("-(\\d+-g.)", "+$1");
+
+        if (settings.tagPrefix != null && version.startsWith(settings.tagPrefix)) {
+            version = version.substring(settings.tagPrefix.length());
+        }
+
+        return version;
+    }
+
+    public static String gitDescribe(Settings settings, File projectDir) {
         ArrayList<String> args = new ArrayList<>();
         args.add("git");
         args.add("describe");
@@ -28,7 +48,13 @@ public class VersionGenerator {
         }
 
         try {
-            Process process = Runtime.getRuntime().exec(args.toArray(new String[0]));
+            Process process = new ProcessBuilder(args)
+                    .redirectInput(ProcessBuilder.Redirect.INHERIT)
+                    .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                    .redirectError(ProcessBuilder.Redirect.INHERIT)
+                    .directory(projectDir)
+                    .start();
+
             String output = IOUtils.toString(process.getInputStream(), Charset.forName("UTF-8"));
 
             process.waitFor();
@@ -36,23 +62,9 @@ public class VersionGenerator {
                 return null;
             }
 
-            return generateFromString(output.trim(), settings);
+            return output;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String generateFromString(String describe, Settings settings) {
-        if (describe == null) {
-            return null;
-        }
-
-        String version = describe.replaceFirst("-(\\d+-g.)", "+$1");
-
-        if (settings.tagPrefix != null && version.startsWith(settings.tagPrefix)) {
-            version = version.substring(settings.tagPrefix.length());
-        }
-
-        return version;
     }
 }

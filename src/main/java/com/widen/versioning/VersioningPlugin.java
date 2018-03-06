@@ -17,7 +17,7 @@ public class VersioningPlugin implements Plugin<Project> {
 
         // Defer setting the version until after the build script is evaluated.
         project.afterEvaluate(p -> {
-            String version = VersionGenerator.generateFromGit(settings);
+            String version = VersionGenerator.generateFromGit(settings, p.getProjectDir());
             if (version != null) {
                 p.setVersion(version);
             }
