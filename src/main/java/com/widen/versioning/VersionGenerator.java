@@ -60,11 +60,12 @@ public class VersionGenerator {
 
             process.waitFor();
             if (process.exitValue() != 0 || output.isEmpty()) {
-                return null;
+                throw new RuntimeException("Git returned status code " + process.exitValue() + ": " + output);
             }
 
             return output;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

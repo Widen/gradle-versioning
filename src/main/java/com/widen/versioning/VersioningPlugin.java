@@ -16,14 +16,24 @@ public class VersioningPlugin implements Plugin<Project> {
         task.doLast(t -> System.out.println(project.getVersion()));
 
         // Defer setting the version until after the build script is evaluated.
-        project.afterEvaluate(p -> {
-            String version = VersionGenerator.generateFromGit(settings, p.getRootProject().getProjectDir());
-            if (version != null) {
-                p.setVersion(version);
-            }
-            else if ("unspecified".equals(p.getVersion())) {
-                p.setVersion(settings.initialVersion);
-            }
-        });
+        project.afterEvaluate(p -> applyVersion(project, settings));
+    }
+
+    private void applyVersion(final Project project, final Settings settings) {
+        String version = null;
+        try {
+            version = VersionGenerator.generateFromGit(settings, project.getRootProject().getProjectDir());
+        }
+        catch (Exception e) {
+            project.getLogger().warn("Error trying to determine project version", e);
+        }
+
+        if (version != null) {
+            project.setVersion(version);
+        }
+        else if ("unspecified".equals(project.getVersion())) {
+            project.getLogger().debug("No version specified, using initial version");
+            project.setVersion(settings.initialVersion);
+        }
     }
 }
