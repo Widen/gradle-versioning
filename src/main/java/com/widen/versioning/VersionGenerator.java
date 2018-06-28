@@ -53,7 +53,7 @@ public class VersionGenerator {
                     .redirectOutput(ProcessBuilder.Redirect.PIPE)
                     .redirectError(ProcessBuilder.Redirect.INHERIT)
                     .directory(projectDir);
-            processBuilder.environment().put("GIT_DIR", projectDir.getPath());
+            processBuilder.environment().put("GIT_DIR", projectDir.getPath() + "/.git");
 
             Process process = processBuilder.start();
             String output = IOUtils.toString(process.getInputStream(), Charset.forName("UTF-8"));
