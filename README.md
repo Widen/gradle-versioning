@@ -1,7 +1,7 @@
 # gradle-versioning
 A Gradle plugin for applying project version from Git tags.
 
-[![Build Status](https://travis-ci.com/Widen/gradle-versioning.svg?token=UKs7oqY6xCy4WamxJFLH&branch=master)](https://travis-ci.com/Widen/gradle-versioning)
+[![Build Status](https://travis-ci.org/Widen/gradle-versioning.svg?branch=master)](https://travis-ci.org/Widen/gradle-versioning)
 
 ## Overview
 This plugin moves your project version out of the `build.gradle` file, and instead uses Git tags as the canonical source of truth for version numbers. This makes it easier to maintain nice version numbers and eliminate "Bump version" commits.
@@ -11,24 +11,7 @@ Version numbers that are generated are based off of the output of running `git d
 > (last tagged version) `+` (commits since last tag) `-` (current commit hash) (`-dirty` if dirty)
 
 ## Usage
-Add the private repository to the list of plugin repositories in `settings.gradle`:
-
-```
-pluginManagement {
-    repositories {
-        maven {
-            credentials {
-                username System.env.JFROG_USER ?: USER
-                password System.env.JFROG_PASS ?: PASSWORD
-            }
-            url 'https://widen.jfrog.io/widen/repo/'
-        }
-        gradlePluginPortal()
-    }
-}
-```
-
-Then apply the plugin using the standard `plugins` configuration:
+Apply the plugin using the standard `plugins` configuration:
 
 ```
 plugins {

@@ -1,50 +1,37 @@
 plugins {
     id 'groovy'
-    id 'java-gradle-plugin'
-    id 'maven-publish'
-    id 'com.widen.versioning' version '0.3.0'
+    id 'java'
+    id 'com.gradle.plugin-publish' version '0.9.10'
 }
 
-group 'widen'
+group = 'com.widen.oss'
+version = '0.3.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    maven {
-        credentials {
-            username System.env.JFROG_USER ?: USER
-            password System.env.JFROG_PASS ?: PASSWORD
-        }
-        url 'https://widen.jfrog.io/widen/repo/'
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            credentials {
-                username System.env.JFROG_USER ?: USER
-                password System.env.JFROG_PASS ?: PASSWORD
-            }
-
-            url 'https://widen.jfrog.io/widen/libs-releases-local'
-        }
-    }
+    jcenter()
 }
 
 dependencies {
+    compile gradleApi()
     compile 'commons-io:commons-io:2.6'
 
     testCompile 'org.codehaus.groovy:groovy-all:2.4.12'
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
 }
 
-gradlePlugin {
+pluginBundle {
+    website = 'https://github.com/Widen/gradle-versioning'
+    vcsUrl = 'https://github.com/Widen/gradle-versioning'
+    description = 'A Gradle plugin for applying project version from Git tags'
+    tags = ['versioning']
+
     plugins {
-        versioning {
+        versioningPlugin {
             id = 'com.widen.versioning'
-            implementationClass = 'com.widen.versioning.VersioningPlugin'
+            displayName = 'Widen Gradle versioning plugin'
         }
     }
 }
