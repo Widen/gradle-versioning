@@ -2,10 +2,10 @@ plugins {
     id 'groovy'
     id 'java'
     id 'com.gradle.plugin-publish' version '0.9.10'
+    id 'com.widen.versioning' version '0.3.1'
 }
 
 group = 'com.widen.oss'
-version = '0.3.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
