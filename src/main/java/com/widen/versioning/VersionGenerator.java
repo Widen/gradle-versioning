@@ -47,12 +47,16 @@ public class VersionGenerator {
             args.add("--dirty");
         }
 
+        if (settings.useCommitHashDefault) {
+            args.add("--always");
+        }
+
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(args)
-                    .redirectInput(ProcessBuilder.Redirect.INHERIT)
-                    .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                    .redirectError(ProcessBuilder.Redirect.INHERIT)
-                    .directory(projectDir);
+                .redirectInput(ProcessBuilder.Redirect.INHERIT)
+                .redirectOutput(ProcessBuilder.Redirect.PIPE)
+                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .directory(projectDir);
             processBuilder.environment().put("GIT_DIR", projectDir.getPath() + "/.git");
 
             Process process = processBuilder.start();
