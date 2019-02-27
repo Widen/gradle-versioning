@@ -1,0 +1,21 @@
+steps:
+  - label: ":junit: Unit Tests"
+    command: "./gradlew check --continue ${GRADLE_SWITCHES}"
+    agents:
+      queue: builder
+    plugins:
+      docker#v1.1.1:
+        image: quay.io/widen/builder-gradle:1.0.0
+        always-pull: true
+
+  - wait
+
+  - label: ":gradle: Publish Plugin"
+    branches: "*.*.*"
+    command: ".buildkite/publish.sh"
+    agents:
+      queue: builder
+    plugins:
+      docker#v1.1.1:
+        image: quay.io/widen/builder-gradle:1.0.0
+        always-pull: true

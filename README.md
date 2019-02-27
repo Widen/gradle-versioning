@@ -1,6 +1,6 @@
-# gradle-versioning
+# Gradle Versioning
 
-[![Build Status](https://travis-ci.org/Widen/gradle-versioning.svg?branch=master)](https://travis-ci.org/Widen/gradle-versioning)
+[![Build Status](https://badge.buildkite.com/7fe00ad3adc6015d2bcf4325e8b470edfb67f283fa9361c9a1.svg)](https://buildkite.com/widen/gradle-versioning)
 
 A Gradle plugin for applying project version from Git tags.
 
