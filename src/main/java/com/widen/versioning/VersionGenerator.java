@@ -5,16 +5,17 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class VersionGenerator {
-    public static String generateFromGit(Settings settings, File projectDir) {
-        String describe = gitDescribe(settings, projectDir);
-        return generateFromString(describe, settings);
+    public static Optional<String> generateFromGit(Settings settings, File projectDir) {
+        return gitDescribe(settings, projectDir)
+            .flatMap(describe -> generateFromString(describe, settings));
     }
 
-    public static String generateFromString(String describe, Settings settings) {
+    public static Optional<String> generateFromString(String describe, Settings settings) {
         if (describe == null) {
-            return null;
+            return Optional.empty();
         }
 
         String version = describe.trim().replaceFirst("-(\\d+-g.)", "+$1");
@@ -23,10 +24,10 @@ public class VersionGenerator {
             version = version.substring(settings.tagPrefix.length());
         }
 
-        return version;
+        return Optional.of(version);
     }
 
-    public static String gitDescribe(Settings settings, File projectDir) {
+    public static Optional<String> gitDescribe(Settings settings, File projectDir) {
         ArrayList<String> args = new ArrayList<>();
         args.add("git");
         args.add("describe");
@@ -63,11 +64,11 @@ public class VersionGenerator {
             String output = IOUtils.toString(process.getInputStream(), Charset.forName("UTF-8"));
 
             process.waitFor();
-            if (process.exitValue() != 0 || output.isEmpty()) {
+            if (process.exitValue() != 0) {
                 throw new RuntimeException("Git returned status code " + process.exitValue() + ": " + output);
             }
 
-            return output;
+            return Optional.of(output).filter(s -> !s.isEmpty());
         }
         catch (Exception e) {
             throw new RuntimeException(e);

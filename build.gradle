@@ -1,8 +1,8 @@
 plugins {
     id 'groovy'
-    id 'java'
-    id 'com.gradle.plugin-publish' version '0.9.10'
-    id 'com.widen.versioning' version '0.3.1'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+    id 'com.widen.versioning' version '0.3.2'
 }
 
 group = 'com.widen.oss'
@@ -15,11 +15,19 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
     compile 'commons-io:commons-io:2.6'
 
     testCompile 'org.codehaus.groovy:groovy-all:2.4.12'
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+gradlePlugin {
+    plugins {
+        versioningPlugin {
+            id = 'com.widen.versioning'
+            implementationClass = 'com.widen.versioning.VersioningPlugin'
+        }
+    }
 }
 
 pluginBundle {

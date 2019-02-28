@@ -7,7 +7,7 @@ class VersionGeneratorTest extends Specification {
     @Unroll("git describe '#describe' should become '#version'")
     def "parse git describe to version"() {
         expect:
-        VersionGenerator.generateFromString(describe, new Settings(tagPrefix: prefix)) == version
+        VersionGenerator.generateFromString(describe, new Settings(tagPrefix: prefix)).orElse(null) == version
 
         where:
         prefix | describe           | version
