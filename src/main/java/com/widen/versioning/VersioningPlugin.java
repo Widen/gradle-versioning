@@ -5,14 +5,17 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 
 public class VersioningPlugin implements Plugin<Project> {
+    private static final String TASK_GROUP = "Versioning";
+    private static final String TASK_DESCRIPTION = "Prints the project's configured version";
+
     @Override
     public void apply(final Project project) {
         // Make settings available to build script.
         final Settings settings = project.getExtensions().create("versioning", Settings.class);
 
-        Task task = project.getTasks().create("printVersion");
-        task.setGroup("Versioning");
-        task.setDescription("Prints the project's configured version");
+        Task task = project.getTasks().create("version");
+        task.setGroup(TASK_GROUP);
+        task.setDescription(TASK_DESCRIPTION);
         task.doLast(t -> System.out.println(project.getVersion()));
 
         project.setVersion(new LazyVersion(project, settings));
