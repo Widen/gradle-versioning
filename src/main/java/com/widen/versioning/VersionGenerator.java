@@ -26,9 +26,13 @@ public class VersionGenerator {
     }
 
     public static Optional<String> gitDescribe(Settings settings, File projectDir) {
+        return gitCommand(settings, projectDir, "describe");
+    }
+
+    static Optional<String> gitCommand(Settings settings, File projectDir, String command) {
         ArrayList<String> args = new ArrayList<>();
         args.add("git");
-        args.add("describe");
+        args.add(command);
         args.add("--tags");
         args.add("--abbrev=7");
 

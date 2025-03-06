@@ -1,5 +1,6 @@
 package com.widen.versioning
 
+
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -27,6 +28,17 @@ class VersionGeneratorTest extends Specification {
 
         then:
         git.isPresent()
+        git.get().matches("[0-9]+\\.[0-9]+\\.[0-9].*")
+    }
+
+    def "git command should error"() {
+        when:
+        def dir = Path.of("").toAbsolutePath().toFile()
+        def git = VersionGenerator.gitCommand(new Settings(), dir, "describex")
+
+        then:
+        def e = thrown(GitException)
+        e.message.contains("git: 'describex' is not a git command")
     }
 
 }
