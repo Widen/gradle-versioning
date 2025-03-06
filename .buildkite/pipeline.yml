@@ -1,21 +1,19 @@
 steps:
   - label: ":junit: Unit Tests"
-    command: "./gradlew check --continue ${GRADLE_SWITCHES}"
     agents:
-      queue: builder
+      queue: test-builder
     plugins:
-      docker#v1.1.1:
-        image: quay.io/widen/builder-gradle:1.0.0
-        always-pull: true
+      Widen/gradle#v1:
+        buildImage: quay.io/widen/corretto-java-11-gradle:gradle8.12-2025-r1
+        tasks: check
 
   - wait
 
   - label: ":gradle: Publish Plugin"
-    branches: "*.*.*"
     command: ".buildkite/publish.sh"
+    branches: "*.*.*"
     agents:
       queue: builder
     plugins:
-      docker#v1.1.1:
-        image: quay.io/widen/builder-gradle:1.0.0
-        always-pull: true
+      Widen/gradle#v1:
+        buildImage: quay.io/widen/corretto-java-11-gradle:gradle8.12-2025-r1

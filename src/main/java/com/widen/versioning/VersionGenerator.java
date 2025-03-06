@@ -1,9 +1,7 @@
 package com.widen.versioning;
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -28,9 +26,13 @@ public class VersionGenerator {
     }
 
     public static Optional<String> gitDescribe(Settings settings, File projectDir) {
+        return gitCommand(settings, projectDir, "describe");
+    }
+
+    static Optional<String> gitCommand(Settings settings, File projectDir, String command) {
         ArrayList<String> args = new ArrayList<>();
         args.add("git");
-        args.add("describe");
+        args.add(command);
         args.add("--tags");
         args.add("--abbrev=7");
 
@@ -54,21 +56,22 @@ public class VersionGenerator {
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder(args)
-                .redirectInput(ProcessBuilder.Redirect.INHERIT)
-                .redirectOutput(ProcessBuilder.Redirect.PIPE)
-                .redirectError(ProcessBuilder.Redirect.INHERIT)
+                .redirectErrorStream(true)
                 .directory(projectDir);
-            processBuilder.environment().put("GIT_DIR", projectDir.getPath() + "/.git");
 
             Process process = processBuilder.start();
-            String output = IOUtils.toString(process.getInputStream(), Charset.forName("UTF-8"));
-
             process.waitFor();
+
+            String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
             if (process.exitValue() != 0) {
-                throw new RuntimeException("Git returned status code " + process.exitValue() + ": " + output);
+                String message = output.replace("\n", " ");
+                throw new GitException("Git returned status code " + process.exitValue() + ": " + message);
             }
 
             return Optional.of(output).filter(s -> !s.isEmpty());
+        }
+        catch (GitException e) {
+            throw e;
         }
         catch (Exception e) {
             throw new RuntimeException(e);

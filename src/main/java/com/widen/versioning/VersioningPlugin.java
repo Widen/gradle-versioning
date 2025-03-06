@@ -3,6 +3,7 @@ package com.widen.versioning;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
+import org.gradle.api.tasks.TaskProvider;
 
 public class VersioningPlugin implements Plugin<Project> {
     private static final String TASK_GROUP = "Versioning";
@@ -13,12 +14,13 @@ public class VersioningPlugin implements Plugin<Project> {
         // Make settings available to build script.
         final Settings settings = project.getExtensions().create("versioning", Settings.class);
 
-        Task task = project.getTasks().create("version");
-        task.setGroup(TASK_GROUP);
-        task.setDescription(TASK_DESCRIPTION);
-        task.doLast(t -> System.out.println(project.getVersion()));
-
-        project.setVersion(new LazyVersion(project, settings));
+        TaskProvider<Task> task = project.getTasks().register("version");
+        task.configure(t -> {
+            t.setGroup(TASK_GROUP);
+            t.setDescription(TASK_DESCRIPTION);
+            t.doLast(a -> System.out.println(project.getVersion()));
+            project.setVersion(new LazyVersion(project, settings));
+        });
     }
 
     private static class LazyVersion {
