@@ -24,12 +24,15 @@ dependencies {
   testImplementation("org.spockframework:spock-core:2.3-groovy-3.0")
 }
 
-testing {
-    suites {
-        val test by getting(JvmTestSuite::class) {
-            useJUnitJupiter()
-        }
-    }
+tasks.test {
+  useJUnitPlatform()
+  testLogging {
+    events("passed", "skipped", "failed")
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    showExceptions = true
+    showCauses = true
+    showStackTraces = true
+  }
 }
 
 gradlePlugin {
@@ -42,7 +45,7 @@ gradlePlugin {
         implementationClass = "com.widen.versioning.VersioningPlugin"
         displayName = "Widen Gradle versioning plugin"
         description = "A Gradle plugin for applying project version from Git tags"
-        tags = listOf("versioning", "git",)
+        tags = listOf("versioning", "git")
       }
     }
   }
