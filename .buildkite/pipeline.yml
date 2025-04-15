@@ -5,7 +5,7 @@ steps:
       queue: builder
     plugins:
       docker#v1.1.1:
-        image: quay.io/widen/builder-gradle:1.0.0
+        image: quay.io/widen/builder-java8:2025-R1
         always-pull: true
 
   - wait
@@ -17,5 +17,5 @@ steps:
       queue: builder
     plugins:
       docker#v1.1.1:
-        image: quay.io/widen/builder-gradle:1.0.0
+        image: quay.io/widen/builder-java8:2025-R1
         always-pull: true
